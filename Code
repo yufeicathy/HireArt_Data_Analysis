@@ -1,0 +1,19 @@
+library(data.table)
+library(ggplot2)
+library(plyr)
+HireArt_Data_Analyst_Exercise_10_12_17_ <- read_excel("Downloads/HireArt - Data Analyst Exercise 10.12.17\357\274\210\345\211\257\346\234\254\357\274\211.xlsx")
+
+##### Read and format the data
+client_data  <- as.data.table(HireArt_Data_Analyst_Exercise_10_12_17_)
+client_data <- client_data[ , year:= year(`Date of Contact`)]
+client_data <- client_data[ , month:= month(`Date of Contact`)]
+
+###count monthly contacts
+client_month <- as.data.table(count(client_data,"month"))
+client_month <- client_month[,percentage:= freq/sum(freq)]
+
+####visualize the results
+ggplot(data=client_month, aes(x=month,y=percentage))+geom_line()+labs(title="Client contacts, by month")
+client_data <- client_data[,month_year := format(as.Date(`Date of Contact`),"%Y-%m")]
+
+
